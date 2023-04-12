@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    ports:
+      - "8000:5000"
+    volumes:
+      - .:/code
+    environment:
+      FLASK_DEBUG: "true"
+    restart: always
+    expose:
+      - "5432"
+  db_auth:
+    image: postgres:alpine3.17
+    container_name: postgres-flask
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    restart: always
+    volumes:
+      - db:/var/lib/postgresql/data
+volumes:
+  db:
+    driver: local
