@@ -1,6 +1,10 @@
 class UserLogin:
     def __init__(self, user_id: int):
         self.__user_id = user_id
+        self.id = user_id
+
+    def hello(self):
+        return "HELLO"
 
     def is_authenticated(self):
         return True

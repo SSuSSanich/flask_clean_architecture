@@ -16,14 +16,14 @@ class PGDatabase(IDatabaseGateway):
         self.__db_connection = self.__db_engine.connect()  # коннектить при вызове или в init?
 
     def save_user_credentials(self, user_data: InputUserCredentials) -> None:
-        if self.is_email_exists(user_data.email):
+        if self.__is_email_exists(user_data.email):
             raise EmailExistenceError("The user already exist")
 
         self.__db_connection.execute(text(f"INSERT INTO \"user\" (name, password_hash, email)"
                                           f" VALUES (\'{user_data.name}\', \'{user_data.password}\', \'{user_data.email}\');"))
         self.__db_connection.commit()
 
-    def is_email_exists(self, email) -> bool:
+    def __is_email_exists(self, email) -> bool:
         result = self.__db_connection.execute(
             text(f"SELECT email FROM \"user\" WHERE email = '{email}';"))
         user_data = result.fetchall()
