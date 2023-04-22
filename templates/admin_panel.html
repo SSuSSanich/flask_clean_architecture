@@ -1,20 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/nav.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/list.css') }}">
+
     <title>Admin-panel</title>
 </head>
 <body>
     <nav>
-        <ul>
-            <li><a href="/">Index</a></li>
-            <li><a href="/sign-up">Sign-up</a></li>
-            <li><a href="/login">Login</a></li>
-            <li><a href="/main-page">Your Page</a></li>
+        <ul class="nav-ul">
+            <li class="nav-li"><a href="/">Index</a></li>
+            <li class="nav-li"><a href="/sign-up">Sign-up</a></li>
+            <li class="nav-li"><a href="/login">Login</a></li>
+            <li class="nav-li"><a href="/main-page">Your Page</a></li>
         </ul>
     </nav>
     <h1>Admin-panel</h1>
-    <p style="color:red">user id: {{ user_id }}</p>
+    <ul class="table" id="logs-list">
+        <li class="table-row">
+            <span class="table-data">Action</span>
+            <span class="table-data">Date</span>
+            <span class="table-data">Email</span>
+            <span class="table-data">Log Id</span>
+            <span class="table-data">User Name</span>
+            <span class="table-data">Remote Address</span>
+            <span class="table-data">User Id</span>
+        </li>
+
+        {% for log in log_list %}
+        <li class="table-row">
+            <span class="table-data">{{ log.action }}</span>
+            <span class="table-data">{{ log.date }}</span>
+            <span class="table-data">{{ log.email }}</span>
+            <span class="table-data">{{ log.log_id }}</span>
+            <span class="table-data">{{ log.name }}</span>
+            <span class="table-data">{{ log.remote_id }}</span>
+            <span class="table-data">{{ log.user_id }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    <button id="load-more">Показать еще</button>
+
+    <script src="{{ url_for('static', filename='scripts/log_loader.js') }}"></script>
 </body>
 </html>

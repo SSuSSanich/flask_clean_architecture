@@ -1,10 +1,12 @@
 from flask import Blueprint, render_template, abort, request
 
-from configuration.main_configuration import user_registrar
+from config import ANONYMOUS_ID
+from configuration.main_configuration import user_registrar, logger
 from src.dto.InputUserCredentials import InputUserCredentials
 from src.exception.EmailExistenceError import EmailExistenceError
 from src.exception.PasswordMismatch import PasswordMismatchError
 from src.exception.ValidationError import ValidationError
+
 
 sign_up_page = Blueprint('sign_up_page', __name__,
                          template_folder='templates')
@@ -22,14 +24,18 @@ def sign_up():
         try:
             user_registrar.register(user_data)
         except ValidationError as error:
-            # написать класс логгер
+            logger.save_log(request.remote_addr, ANONYMOUS_ID, str(error))
             abort(400, description=error)
         except EmailExistenceError as error:
-            # написать класс логгер
+            logger.save_log(request.remote_addr, ANONYMOUS_ID, str(error))
             abort(400, description=error)
         except PasswordMismatchError as error:
-            # написать класс логгер
+            logger.save_log(request.remote_addr, ANONYMOUS_ID, str(error))
             abort(400, description=error)
 
+        logger.save_log(request.remote_addr,
+                        ANONYMOUS_ID,
+                        f"The user is registered as {user_data.name} with email: {user_data.email}")
         return render_template('login.html')
+
     return render_template('sign-up.html')

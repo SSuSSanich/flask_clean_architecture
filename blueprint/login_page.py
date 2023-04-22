@@ -2,7 +2,8 @@ from flask import Blueprint, render_template, abort, request, redirect
 from flask_login import LoginManager, login_user
 
 from UserLogin import UserLogin
-from configuration.main_configuration import user_logger
+from config import ANONYMOUS_ID
+from configuration.main_configuration import user_logger, logger
 from src.dto.LoginInformation import LoginInformation
 
 from src.exception.UserExistenceError import UserExistenceError
@@ -40,10 +41,10 @@ def login():
         try:
             output_user_credentials = user_logger.login(login_info)
         except ValidationError as error:
-            # класс логгер
+            logger.save_log(request.remote_addr, ANONYMOUS_ID, str(error))
             abort(401, description="The incorrect username or password")
         except UserExistenceError as error:
-            # класс логгер
+            logger.save_log(request.remote_addr, ANONYMOUS_ID, str(error))
             abort(401, description=error)
 
         session_save = UserLogin(output_user_credentials.user_id)
@@ -51,6 +52,8 @@ def login():
             login_user(session_save)
         else:
             login_user(session_save)
+
+        logger.save_log(request.remote_addr, session_save.get_id(), "Log In")
 
         return redirect("/main-page", 301)
     return render_template('login.html')

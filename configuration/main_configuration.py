@@ -1,11 +1,15 @@
 from src.database.IDatabaseGateway import IDatabaseGateway
+from src.database.ILogGateway import ILogGateway
+from src.database.LogDatabase import LogDatabase
 from src.database.PGDatabase import PGDatabase
 from src.database.SQLAlchemyPGDatabase import SQLAlchemyPGDatabase
 from src.usecase.HashLibPasswordHasher import HashLibPasswordHasher
+from src.usecase.ILogger import ILogger
 from src.usecase.IPasswordHasher import IPasswordHasher
 from src.usecase.IUserLogger import IUserLogger
 from src.usecase.IUserRegistrar import IUserRegistrar
 from src.usecase.IValidator import IValidator
+from src.usecase.SimpleLogger import SimpleLogger
 from src.usecase.SimpleUserLogger import SimpleUserLogger
 from src.usecase.SimpleUserRegistrar import SimpleUserRegistrar
 from src.usecase.SimpleValidator import SimpleValidator
@@ -17,3 +21,6 @@ validator: IValidator = SimpleValidator()
 password_hasher: IPasswordHasher = HashLibPasswordHasher(HASH_SECRET_KEY)
 user_registrar: IUserRegistrar = SimpleUserRegistrar(validator, database, password_hasher)
 user_logger: IUserLogger = SimpleUserLogger(database, validator, password_hasher)
+
+log_database: ILogGateway = LogDatabase()
+logger: ILogger = SimpleLogger(log_database)

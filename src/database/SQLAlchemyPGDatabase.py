@@ -22,8 +22,8 @@ class Base(DeclarativeBase):
     pass
 
 
-class User(Base):
-    __tablename__ = "user"
+class Client(Base):
+    __tablename__ = "client"
     user_id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(64))
     password_hash: Mapped[str] = mapped_column(String(64))
@@ -54,7 +54,7 @@ class SQLAlchemyPGDatabase(IDatabaseGateway):
             raise EmailExistenceError("The user already exist")
 
         with Session(self.__db_engine) as session:
-            new_user = User(
+            new_user = Client(
                 name=user_data.name,
                 password_hash=user_data.password,
                 email=user_data.email
@@ -66,7 +66,7 @@ class SQLAlchemyPGDatabase(IDatabaseGateway):
     def __is_email_exists(self, email) -> bool:
         session = Session(self.__db_engine)
 
-        stmt = sqlalchemy.select(User).where(sqlalchemy.and_(User.email == email))
+        stmt = sqlalchemy.select(Client).where(sqlalchemy.and_(Client.email == email))
         user_data = session.scalars(stmt).first()
         if not user_data:
             return False
@@ -75,8 +75,8 @@ class SQLAlchemyPGDatabase(IDatabaseGateway):
     def get_user_by_email_and_pass_hash(self, email: str, password: str) -> OutputUserCredentials:
         session = Session(self.__db_engine)
 
-        stmt = sqlalchemy.select(User).where(sqlalchemy.and_(User.email == email,
-                                                             User.password_hash == password))
+        stmt = sqlalchemy.select(Client).where(sqlalchemy.and_(Client.email == email,
+                                                               Client.password_hash == password))
         user_data = session.scalars(stmt).first()
 
         if not user_data:

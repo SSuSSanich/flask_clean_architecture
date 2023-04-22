@@ -14,7 +14,13 @@ DB_NAME = os.environ.get("DB_NAME")
 FLASK_SECRET_KEY = os.environ.get("FLASK_SECRET_KEY")
 HASH_SECRET_KEY = os.environ.get("HASH_SECRET_KEY")
 
+# Timezone
+TIMEZONE = os.environ.get("TIMEZONE")
+
 # Flags
 DEBUG = os.environ.get("DEBUG")
 TESTING = os.environ.get("TESTING")
 LOG_LEVEL = os.environ.get("LOG_LEVEL")
+
+# Anonymous
+ANONYMOUS_ID = os.environ.get("ANONYMOUS_ID")

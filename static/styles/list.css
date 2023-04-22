@@ -1,0 +1,22 @@
+.table {
+  display: table;
+  width: 100%;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.table-row {
+  display: table-row;
+  border-bottom: 1px solid #ccc;
+}
+
+.table-data {
+  display: table-cell;
+  padding: 10px;
+  border: 2px solid black;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}

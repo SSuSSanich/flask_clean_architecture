@@ -19,13 +19,13 @@ class PGDatabase(IDatabaseGateway):
         if self.__is_email_exists(user_data.email):
             raise EmailExistenceError("The user already exist")
 
-        self.__db_connection.execute(text(f"INSERT INTO \"user\" (name, password_hash, email)"
+        self.__db_connection.execute(text(f"INSERT INTO client (name, password_hash, email)"
                                           f" VALUES (\'{user_data.name}\', \'{user_data.password}\', \'{user_data.email}\');"))
         self.__db_connection.commit()
 
     def __is_email_exists(self, email) -> bool:
         result = self.__db_connection.execute(
-            text(f"SELECT email FROM \"user\" WHERE email = '{email}';"))
+            text(f"SELECT email FROM client WHERE email = '{email}';"))
         user_data = result.fetchall()
 
         if len(user_data) == 0:
@@ -35,7 +35,7 @@ class PGDatabase(IDatabaseGateway):
 
     def get_user_by_email_and_pass_hash(self, email: str, password: str) -> OutputUserCredentials:
         result = self.__db_connection.execute(
-            text(f"SELECT * FROM \"user\" WHERE email = '{email}' AND password_hash = '{password}';"))
+            text(f"SELECT * FROM client WHERE email = '{email}' AND password_hash = '{password}';"))
         user_data = result.fetchall()
         if len(user_data) == 0:
             raise UserExistenceError("The incorrect username or password")

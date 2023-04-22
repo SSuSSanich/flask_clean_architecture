@@ -11,4 +11,5 @@ class HashLibPasswordHasher(IPasswordHasher):
             'sha256',
             password.encode('utf-8'),
             self.__secret_key.encode('utf-8'),
-            100000).hex()
+            100000
+        ).hex()
